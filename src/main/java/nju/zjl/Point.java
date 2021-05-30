@@ -5,26 +5,31 @@ import javafx.scene.paint.Color;
 
 public class Point extends AbstractItem {
     public Point(double x, double y){
-        v1 = new Vector2D(x, y);
+        super();
+        pos = new Vector2D(x, y);
     }
 
     @Override
     public void draw(GraphicsContext gc){
         gc.setFill(Color.RED);
-        gc.fillOval(v1.x - Constants.POINT_RADIUS, v1.y - Constants.POINT_RADIUS, Constants.POINT_RADIUS*2, Constants.POINT_RADIUS*2);
+        gc.fillOval(pos.x - Constants.POINT_RADIUS, pos.y - Constants.POINT_RADIUS, Constants.POINT_RADIUS*2, Constants.POINT_RADIUS*2);
     }
 
     @Override
     public boolean hangOver(double x, double y){
-        double dx = Math.abs(x - v1.x);
-        double dy = Math.abs(y - v1.y);
+        double dx = Math.abs(x - pos.x);
+        double dy = Math.abs(y - pos.y);
         return dx <= Constants.POINT_RADIUS && dy <= Constants.POINT_RADIUS;
     }
 
     @Override
     public void translate(double dx, double dy){
-        v1.translate(dx, dy);
+        pos.translate(dx, dy);
     }
 
-    private Vector2D v1;
+    public Vector2D getPos(){
+        return pos;
+    }
+
+    private Vector2D pos;
 }

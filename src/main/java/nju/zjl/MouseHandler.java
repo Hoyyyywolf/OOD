@@ -1,16 +1,18 @@
 package nju.zjl;
 
 import java.util.List;
+import java.util.function.Consumer;
 
-public interface MouseHandler {
-    public void init(List<AbstractItem> tempItems);
-    public boolean mouseMoved(double x, double y, List<AbstractItem> items, List<AbstractItem> tempItems, AbstractItem selectedItem);
-    public boolean mouseClicked(double x, double y, List<AbstractItem> items, List<AbstractItem> tempItems, AbstractItem selectedItem);
+public abstract class MouseHandler {
+    public abstract void setup();
+    public abstract void cleanup();
+    public abstract boolean mouseMoved(double x, double y);
+    public abstract boolean mouseClicked(double x, double y);
 
-    public static AbstractItem overWhich(double x, double y, List<AbstractItem> items){
+    protected <T extends AbstractItem> T overWhich(double x, double y, List<T> items){
         boolean flag = true;
-        AbstractItem ret = null;
-        for(AbstractItem i : items){
+        T ret = null;
+        for(T i : items){
             i.setOvered(false);
             if(flag && i.hangOver(x, y)){
                 i.setOvered(true);
@@ -19,5 +21,17 @@ public interface MouseHandler {
             }
         }
         return ret;
+    }
+
+    protected static List<Point> points;
+    protected static List<AbstractItem> items;
+    protected static List<AbstractItem> tempItems;
+    protected static Consumer<AbstractItem> setSelectedItem;
+
+    public static void init(List<Point> ps, List<AbstractItem> is, List<AbstractItem> tis, Consumer<AbstractItem> ssi){
+        points = ps;
+        items = is;
+        tempItems = tis;
+        setSelectedItem = ssi;
     }
 }
