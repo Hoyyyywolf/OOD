@@ -17,7 +17,7 @@ public class CanvasController {
         state = "";
         handler = new MoveTool(items, selectedItems);
         handlerMap = new HashMap<>();
-        
+
         initHandler();
         initTool();
     }
@@ -25,6 +25,7 @@ public class CanvasController {
     public void initTool(){
         handlerMap.put("line", new LineTool(items, tempItems));
         handlerMap.put("move", new MoveTool(items, selectedItems));
+        handlerMap.put("triangle", new BinaryItemTool(items, tempItems, Triangle::new));
     }
 
     public void changeState(String s){
