@@ -10,7 +10,7 @@ public class Line extends AbstractBinaryItem {
 
     @Override
     public void drawItem(GraphicsContext gc){
-        gc.setStroke(Color.BLUE);
+        gc.setStroke(Color.BLACK);
         gc.strokeLine(v1.x, v1.y, v2.x, v2.y);
     }
 

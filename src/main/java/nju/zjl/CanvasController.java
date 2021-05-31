@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseButton;
 
 public class CanvasController {
     public CanvasController(Canvas canvas){
@@ -15,16 +14,16 @@ public class CanvasController {
         items = new LinkedList<>();
         tempItems = new LinkedList<>();
         selectedItems = new LinkedList<>();
-        state = "move";
-        handler = new MoveTool();
+        state = "";
+        handler = new MoveTool(items, selectedItems);
         handlerMap = new HashMap<>();
 
         initHandler();
-        addTool("point", new LineTool(items, tempItems));
+        initTool();
     }
 
-    public void addTool(String state, MouseHandler handler){
-        handlerMap.put(state, handler);
+    public void initTool(){
+        handlerMap.put("line", new LineTool(items, tempItems));
     }
 
     public void changeState(String s){
@@ -44,11 +43,23 @@ public class CanvasController {
 
     private void initHandler(){
         canvas.setOnMouseMoved(evt -> {
-            if(handler.mouseMoved(evt.getX(), evt.getY()))
+            if(handler.mouseMoved(evt))
                 updateCanvas();
         });
         canvas.setOnMouseClicked(evt -> {
-            if(evt.getButton().equals(MouseButton.PRIMARY) && handler.mouseClicked(evt.getX(), evt.getY()))
+            if(handler.mouseClicked(evt))
+                updateCanvas();    
+        });
+        canvas.setOnMousePressed(evt -> {
+            if(handler.mousePressed(evt))
+                updateCanvas();    
+        });
+        canvas.setOnMouseDragged(evt -> {
+            if(handler.mouseDragged(evt))
+                updateCanvas();    
+        });
+        canvas.setOnMouseDragReleased(evt -> {
+            if(handler.mouseDragReleased(evt))
                 updateCanvas();    
         });
     }

@@ -2,41 +2,40 @@ package nju.zjl;
 
 import java.util.List;
 
-public class LineTool implements MouseHandler {
-    public LineTool(List<AbstractItem> items, List<AbstractItem> tempItems){
-        clicked = false;
-        this.items = items;
-        this.tempItems = tempItems;
-    }
+import javafx.scene.input.MouseEvent;
 
+public class LineTool extends BinaryItemTool {
+    public LineTool(List<AbstractItem> items, List<AbstractItem> tempItems){
+        super(items, tempItems, Line::new);
+    }
+    
     @Override
-    public boolean mouseMoved(double x, double y){
+    public boolean mouseMoved(MouseEvent evt){
+        double x = evt.getX();
+        double y = evt.getY();
         if(clicked){
-            tempLine.setVec2(x, y);
+            if(evt.isShiftDown()){
+                x -= x1;
+                y -= y1;
+                if(Math.abs(x) < 0.414*Math.abs(y)){
+                    x = 0;
+                }
+                else if(Math.abs(y) < 0.414*Math.abs(x)){
+                    y = 0;
+                }
+                else if(Math.abs(x) < Math.abs(y)){
+                    y = Math.signum(y)*Math.abs(x);
+                }
+                else{
+                    x = Math.signum(x)*Math.abs(y);
+                }
+                temp.setVec2(x1 + x, y1 + y);
+            }       
+            else{
+                temp.setVec2(x, y);
+            }     
             return true;
         }
         return false;
     }
-
-    @Override
-    public boolean mouseClicked(double x, double y){
-        if(clicked){
-            clicked = false;
-            tempLine.setVec2(x, y);
-            items.add(tempLine);
-            tempItems.clear();
-        }
-        else{
-            clicked = true;
-            tempLine = new Line(x, y, x, y);
-            tempItems.add(tempLine);
-        }
-
-        return true;
-    }
-
-    boolean clicked;
-    protected Line tempLine;
-    protected List<AbstractItem> items;
-    protected List<AbstractItem> tempItems;
 }
