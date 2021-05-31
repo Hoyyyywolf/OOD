@@ -17,13 +17,14 @@ public class CanvasController {
         state = "";
         handler = new MoveTool(items, selectedItems);
         handlerMap = new HashMap<>();
-
+        
         initHandler();
         initTool();
     }
 
     public void initTool(){
         handlerMap.put("line", new LineTool(items, tempItems));
+        handlerMap.put("move", new MoveTool(items, selectedItems));
     }
 
     public void changeState(String s){

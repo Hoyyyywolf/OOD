@@ -16,6 +16,9 @@ public class Line extends AbstractBinaryItem {
 
     @Override
     public boolean hangOver(double x, double y){
-        return AbstractItem.overLine(x, y, v1, v2);
+        if(boundingRect().inside(x, y)){
+            return AbstractItem.overLine(x, y, v1, v2);
+        }
+        return false;
     }
 }

@@ -9,7 +9,9 @@ public abstract class AbstractBinaryItem extends AbstractItem {
 
     @Override
     public Rect boundingRect(){
-        return new Rect((int)v1.x, (int)v1.y, (int)Math.abs(v1.x - v2.x), (int)Math.abs(v1.y - v2.y));
+        double x = Math.min(v1.x, v2.x);
+        double y = Math.min(v1.y, v2.y);
+        return new Rect(x - 1, y - 1, Math.abs(v1.x - v2.x) + 2, Math.abs(v1.y - v2.y) + 2);
     }
 
     @Override

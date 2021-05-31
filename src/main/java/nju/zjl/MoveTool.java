@@ -8,12 +8,16 @@ public class MoveTool implements MouseHandler {
     public MoveTool(List<AbstractItem> items, List<AbstractItem> selectedItems){
         this.items = items;
         this.selectedItems = selectedItems;
+        lastOver = null;
+        lastX = 0;
+        lastY = 0;
     }
     
     @Override
     public boolean mouseMoved(MouseEvent evt){
-        AbstractItem i = overWhich(evt.getX(), evt.getY(), items);
-        return i != null;
+        AbstractItem temp = lastOver;
+        lastOver = overWhich(evt.getX(), evt.getY(), items);
+        return lastOver != temp;
     }
 
     @Override
@@ -21,13 +25,35 @@ public class MoveTool implements MouseHandler {
         double x = evt.getX();
         double y = evt.getY();
         AbstractItem i = overWhich(x, y, items);
-        System.out.println("press");
+        if(i == null){
+            if(!selectedItems.isEmpty()){
+                selectedItems.stream().forEach(it -> it.setSelected(false));
+                selectedItems.clear();
+                return true;
+            }
+        }
+        else{
+            selectedItems.stream().forEach(it -> it.setSelected(false));
+            selectedItems.clear();
+            i.setSelected(true);
+            selectedItems.add(i);
+            lastX = x;
+            lastY = y;
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean mouseDragged(MouseEvent evt){
-        System.out.println("drag");
+        double x = evt.getX();
+        double y = evt.getY();
+        if(!selectedItems.isEmpty()){
+            selectedItems.stream().forEach(it -> it.translate(x - lastX, y - lastY));
+            lastX = x;
+            lastY = y;
+            return true;
+        }
         return false;
     }
 
@@ -47,4 +73,7 @@ public class MoveTool implements MouseHandler {
 
     protected List<AbstractItem> items;
     protected List<AbstractItem> selectedItems;
+    protected AbstractItem lastOver;
+    protected double lastX;
+    protected double lastY;
 }

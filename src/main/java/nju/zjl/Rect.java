@@ -1,13 +1,21 @@
 package nju.zjl;
 
 public class Rect {
-    public Rect(int x, int y, int w, int h){
+    public Rect(double x, double y, double w, double h){
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
     }
 
-    public int x, y;
-    public int w, h;
+    public boolean inside(double x0, double y0){
+        x0 -= x;
+        y0 -= y;
+        return x0 >= 0 && x0 <= w && y0 >= 0 && y0 <= h;
+    }
+
+    public double x;
+    public double y;
+    public double w;
+    public double h;
 }

@@ -38,7 +38,7 @@ public abstract class AbstractItem {
         double a = v2.y - v1.y;
         double b = v1.x - v2.x;
         double offset = a*x + b*y -v1.x*v2.y + v2.x*v1.y;
-        return offset <= Math.abs(a) + Math.abs(b);
+        return Math.abs(offset) <= Constants.LINE_WIDTH*(Math.abs(a) + Math.abs(b));
     }
 
     public abstract void drawItem(GraphicsContext gc);

@@ -17,12 +17,14 @@ public class App extends Application {
         ScrollPane scrollPane = new ScrollPane();
         Canvas canvas = new Canvas(2000, 2000);
         VBox vBox = new VBox();
+        Button b = new Button("move");
         Button button = new Button("line");
-        vBox.getChildren().add(button);
+        vBox.getChildren().addAll(b, button);
         scrollPane.setContent(canvas);
         root.setCenter(scrollPane);
         root.setLeft(vBox);
         CanvasController cc = new CanvasController(canvas);
+        b.setOnMouseClicked(evt -> cc.changeState("move"));
         button.setOnMouseClicked(evt -> cc.changeState("line"));
         root.setPrefSize(800, 600);
         Scene scene = new Scene(root);
