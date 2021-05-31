@@ -45,8 +45,9 @@ public class App extends Application {
         Button b3 = new Button("triangle");
         Button b4 = new Button("rectangle");
         Button b5 = new Button("ellipse");
+        Button b6 = new Button("text");
 
-        vBox.getChildren().addAll(b1, b2, b3, b4, b5);
+        vBox.getChildren().addAll(b1, b2, b3, b4, b5, b6);
         vBox.setSpacing(20);
         
         b1.setOnMouseClicked(evt -> cc.changeState("move"));
@@ -54,6 +55,7 @@ public class App extends Application {
         b3.setOnMouseClicked(evt -> cc.changeState("triangle"));
         b4.setOnMouseClicked(evt -> cc.changeState("rectangle"));
         b5.setOnMouseClicked(evt -> cc.changeState("ellipse"));
+        b6.setOnMouseClicked(evt -> cc.changeState("text"));
     }
 
     private void initMenuBar(MenuBar mBar){

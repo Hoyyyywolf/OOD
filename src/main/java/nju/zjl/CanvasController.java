@@ -28,6 +28,7 @@ public class CanvasController {
         handlerMap.put("triangle", new BinaryItemTool(items, tempItems, Triangle::new));
         handlerMap.put("rectangle", new BinaryItemTool(items, tempItems, Rectangle::new));
         handlerMap.put("ellipse", new BinaryItemTool(items, tempItems, Ellipse::new));
+        handlerMap.put("text", new TextTool(items));
     }
 
     public void changeState(String s){

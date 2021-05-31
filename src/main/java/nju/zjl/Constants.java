@@ -6,4 +6,6 @@ public final class Constants {
     public static final double LINE_WIDTH = 2.0;
     public static final double DASH_LINE_WIDTH = 1.0;
     public static final double DASHES = 4.0;
+    public static final double TEXT_WIDTH = 200.0;
+    public static final double TEXT_HEIGHT = 20.0;
 }
