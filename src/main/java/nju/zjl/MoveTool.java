@@ -1,16 +1,6 @@
 package nju.zjl;
 
-public class MoveTool extends MouseHandler {
-    @Override
-    public void setup(){
-
-    }
-
-    @Override
-    public void cleanup(){
-
-    }
-
+public class MoveTool implements MouseHandler {
     @Override
     public boolean mouseMoved(double x, double y){
         return false;

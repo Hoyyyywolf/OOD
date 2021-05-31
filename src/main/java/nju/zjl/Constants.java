@@ -3,5 +3,7 @@ package nju.zjl;
 public final class Constants {
     private Constants(){}
 
-    public static final double POINT_RADIUS = 4.0;
+    public static final double LINE_WIDTH = 2.0;
+    public static final double DASH_LINE_WIDTH = 1.0;
+    public static final double DASHES = 2.0;
 }

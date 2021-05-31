@@ -12,17 +12,15 @@ import javafx.scene.input.MouseButton;
 public class CanvasController {
     public CanvasController(Canvas canvas){
         this.canvas = canvas;
-        points = new LinkedList<>();
         items = new LinkedList<>();
         tempItems = new LinkedList<>();
-        selectedItem = null;
+        selectedItems = new LinkedList<>();
         state = "move";
         handler = new MoveTool();
         handlerMap = new HashMap<>();
 
-        MouseHandler.init(points, items, tempItems, item -> selectedItem = item);
         initHandler();
-        addTool("point", new PointTool());
+        addTool("point", new LineTool(items, tempItems));
     }
 
     public void addTool(String state, MouseHandler handler){
@@ -32,9 +30,8 @@ public class CanvasController {
     public void changeState(String s){
         if(!state.equals(s)){
             state = s;
-            handler.cleanup();
             handler = handlerMap.get(s);
-            handler.setup();
+            tempItems.clear();
         }
     }
 
@@ -43,7 +40,6 @@ public class CanvasController {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         items.stream().forEach(i -> i.draw(gc));
         tempItems.stream().forEach(i -> i.draw(gc));
-        points.stream().forEach(p -> p.draw(gc));
     }
 
     private void initHandler(){
@@ -58,10 +54,9 @@ public class CanvasController {
     }
 
     private Canvas canvas;
-    private List<Point> points;
     private List<AbstractItem> items;
     private List<AbstractItem> tempItems;
-    private AbstractItem selectedItem;
+    private List<AbstractItem> selectedItems;
     String state;
     private MouseHandler handler;
     private Map<String, MouseHandler> handlerMap;
