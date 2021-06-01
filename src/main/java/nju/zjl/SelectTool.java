@@ -168,6 +168,10 @@ class BoxSelection extends AbstractBinaryItem {
         gc.setGlobalAlpha(0.3);
         gc.fillRect(Math.min(v1.x, v2.x), Math.min(v1.y, v2.y), Math.abs(v1.x - v2.x), Math.abs(v1.y - v2.y));
         gc.setGlobalAlpha(1.0);
+        gc.setLineWidth(1.0);
+        gc.setStroke(Color.BLACK);
+        gc.strokeRect(Math.min(v1.x, v2.x), Math.min(v1.y, v2.y), Math.abs(v1.x - v2.x), Math.abs(v1.y - v2.y));
+        gc.setLineWidth(Constants.LINE_WIDTH);
     }
 
     @Override

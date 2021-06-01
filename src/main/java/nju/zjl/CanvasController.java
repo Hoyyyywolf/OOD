@@ -57,6 +57,7 @@ public class CanvasController {
     }
 
     public void undo(){
+        selectedItems.forEach(i -> i.setSelected(false));
         selectedItems.clear();
         recorder.undo();
         updateCanvas();
