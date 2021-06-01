@@ -44,6 +44,16 @@ public class CompositeItem extends AbstractItem {
         y += dy;
     }
 
+    @Override
+    public CompositeItem clone() throws CloneNotSupportedException {
+        CompositeItem ret = (CompositeItem)super.clone();
+        ret.children = new LinkedList<>();
+        for(AbstractItem i : this.children){
+            ret.children.add(i.clone());
+        }
+        return ret;
+    }
+
     protected List<AbstractItem> children;
     protected double x, y;
     protected double w, h;

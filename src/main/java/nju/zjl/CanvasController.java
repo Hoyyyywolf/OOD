@@ -55,8 +55,8 @@ public class CanvasController {
     private void updateCanvas(){
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        items.stream().forEach(i -> i.draw(gc));
-        tempItems.stream().forEach(i -> i.draw(gc));
+        items.forEach(i -> i.draw(gc));
+        tempItems.forEach(i -> i.draw(gc));
     }
 
     private void initHandler(){

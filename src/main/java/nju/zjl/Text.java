@@ -31,6 +31,13 @@ public class Text extends AbstractItem {
         pivot.translate(dx, dy);
     }
 
+    @Override
+    public Text clone() throws CloneNotSupportedException {
+        Text ret = (Text)super.clone();
+        ret.pivot = this.pivot.clone();
+        return ret;
+    }
+
     Vector2D pivot;
     String content;
 }

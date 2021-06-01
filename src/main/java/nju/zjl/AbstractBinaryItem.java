@@ -20,6 +20,14 @@ public abstract class AbstractBinaryItem extends AbstractItem {
         v2.translate(dx, dy);
     }
 
+    @Override
+    public AbstractBinaryItem clone() throws CloneNotSupportedException {
+        AbstractBinaryItem ret = (AbstractBinaryItem)super.clone();
+        ret.v1 = this.v1.clone();
+        ret.v2 = this.v2.clone();
+        return ret;
+    }
+
     public void setVec2(double x, double y){
         v2.x = x;
         v2.y = y;

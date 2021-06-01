@@ -1,5 +1,6 @@
 package nju.zjl;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -36,14 +37,14 @@ public class MoveTool implements MouseHandler {
         if(i == null){
             pressSpace = true;
             if(!selectedItems.isEmpty()){
-                selectedItems.stream().forEach(it -> it.setSelected(false));
+                selectedItems.forEach(it -> it.setSelected(false));
                 selectedItems.clear();
                 return true;
             }
         }
         else{
             pressSpace = false;
-            selectedItems.stream().forEach(it -> it.setSelected(false));
+            selectedItems.forEach(it -> it.setSelected(false));
             selectedItems.clear();
             i.setSelected(true);
             selectedItems.add(i);
@@ -68,19 +69,25 @@ public class MoveTool implements MouseHandler {
             }
         }
         else{
-            if(evt.isAltDown()){
-                if(!beginCopy){
-                    beginCopy = true;
-                    
+            if(evt.isAltDown() && !beginCopy){
+                beginCopy = true;
+                List<AbstractItem> newItems = new LinkedList<>();
+                try{
+                    for(AbstractItem i : selectedItems){
+                        newItems.add(i.clone());
+                        i.setSelected(false);
+                    }
+                    items.addAll(newItems);
+                    selectedItems.clear();
+                    selectedItems.addAll(newItems);
+                }catch(CloneNotSupportedException e){
+                    e.printStackTrace();
+                    selectedItems.clear();
                 }
-                lastX = x;
-                lastY = y;
             }
-            else{
-                selectedItems.stream().forEach(it -> it.translate(x - lastX, y - lastY));
-                lastX = x;
-                lastY = y;
-            }
+            selectedItems.forEach(i -> i.translate(x - lastX, y - lastY));
+            lastX = x;
+            lastY = y;
         }
         return true;
     }
@@ -93,6 +100,7 @@ public class MoveTool implements MouseHandler {
             boxSelection = null;
             return true;
         }
+        beginCopy = false;
         return false;
     }
 

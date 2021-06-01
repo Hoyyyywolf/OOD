@@ -3,10 +3,15 @@ package nju.zjl;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public abstract class AbstractItem {
+public abstract class AbstractItem implements Cloneable {
     protected AbstractItem(){
         overed = false;
         selected = false;
+    }
+
+    @Override
+    public AbstractItem clone() throws CloneNotSupportedException {
+        return (AbstractItem)super.clone();
     }
 
     public void draw(GraphicsContext gc){
