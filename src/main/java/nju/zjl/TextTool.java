@@ -7,8 +7,9 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 
 public class TextTool implements MouseHandler {
-    public TextTool(List<AbstractItem> items){
+    public TextTool(List<AbstractItem> items, Recorder recorder){
         this.items = items;
+        this.recorder = recorder;
     }
 
     @Override
@@ -20,10 +21,12 @@ public class TextTool implements MouseHandler {
         if(res.isPresent()){
             Text text = new Text(evt.getX(), evt.getY(), res.get());
             items.add(text);
+            recorder.addRecord(new CreateRecord(text, items));
             return true;
         }
         return false;
     }
 
     protected List<AbstractItem> items;
+    protected Recorder recorder;
 }

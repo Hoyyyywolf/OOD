@@ -7,10 +7,12 @@ import java.util.Map;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.StrokeLineCap;
 
 public class CanvasController {
     public CanvasController(Canvas canvas){
         this.canvas = canvas;
+        recorder = new Recorder(20);
         items = new LinkedList<>();
         tempItems = new LinkedList<>();
         selectedItems = new LinkedList<>();
@@ -18,17 +20,18 @@ public class CanvasController {
         handler = new MouseHandler(){};
         handlerMap = new HashMap<>();
 
+        canvas.getGraphicsContext2D().setLineCap(StrokeLineCap.ROUND);
         initHandler();
         initTool();
     }
 
     public void initTool(){
-        handlerMap.put("line", new LineTool(items, tempItems));
-        handlerMap.put("move", new MoveTool(items, tempItems, selectedItems));
-        handlerMap.put("triangle", new BinaryItemTool(items, tempItems, Triangle::new));
-        handlerMap.put("rectangle", new BinaryItemTool(items, tempItems, Rectangle::new));
-        handlerMap.put("ellipse", new BinaryItemTool(items, tempItems, Ellipse::new));
-        handlerMap.put("text", new TextTool(items));
+        handlerMap.put("line", new LineTool(items, tempItems, recorder));
+        handlerMap.put("move", new SelectTool(items, tempItems, selectedItems, recorder));
+        handlerMap.put("triangle", new BinaryItemTool(items, tempItems, recorder, Triangle::new));
+        handlerMap.put("rectangle", new BinaryItemTool(items, tempItems, recorder, Rectangle::new));
+        handlerMap.put("ellipse", new BinaryItemTool(items, tempItems, recorder, Ellipse::new));
+        handlerMap.put("text", new TextTool(items, recorder));
     }
 
     public void changeState(String s){
@@ -49,6 +52,13 @@ public class CanvasController {
         selectedItems.clear();
         selectedItems.add(ci);
         ci.setSelected(true);
+        recorder.addRecord(new ComposeRecord(ci, items));
+        updateCanvas();
+    }
+
+    public void undo(){
+        selectedItems.clear();
+        recorder.undo();
         updateCanvas();
     }
 
@@ -83,10 +93,29 @@ public class CanvasController {
     }
 
     private Canvas canvas;
+    private Recorder recorder;
     private List<AbstractItem> items;
     private List<AbstractItem> tempItems;
     private List<AbstractItem> selectedItems;
     String state;
     private MouseHandler handler;
     private Map<String, MouseHandler> handlerMap;
+}
+
+class ComposeRecord implements Record {
+    ComposeRecord(CompositeItem c, List<AbstractItem> items){
+        this.c = c;
+        this.items = items;
+    }
+
+    @Override
+    public void undo(){
+        items.remove(c);
+        for(AbstractItem i : c.getChildren()){
+            items.add(i);
+        }
+    }
+
+    private CompositeItem c;
+    private List<AbstractItem> items;
 }

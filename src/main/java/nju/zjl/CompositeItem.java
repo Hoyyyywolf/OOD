@@ -24,20 +24,24 @@ public class CompositeItem extends AbstractItem {
         h = ymax - ymin;
     }
 
+    @Override
     public void drawItem(GraphicsContext gc){
         for(AbstractItem i : children){
             i.drawItem(gc);
         }
     }
 
+    @Override
     public boolean hangOver(double x, double y){
         return boundingRect().inside(x, y);
     }
 
+    @Override
     public Rect boundingRect(){
         return new Rect(x, y, w, h);
     }
 
+    @Override
     public void translate(double dx, double dy){
         children.stream().forEach(i -> i.translate(dx, dy));
         x += dx;
@@ -52,6 +56,10 @@ public class CompositeItem extends AbstractItem {
             ret.children.add(i.clone());
         }
         return ret;
+    }
+
+    public List<AbstractItem> getChildren(){
+        return children;
     }
 
     protected List<AbstractItem> children;

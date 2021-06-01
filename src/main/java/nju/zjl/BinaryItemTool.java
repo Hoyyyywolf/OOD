@@ -6,8 +6,9 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 public class BinaryItemTool implements MouseHandler {
-    public BinaryItemTool(List<AbstractItem> items, List<AbstractItem> tempItems, BinaryItemSupplier supplier){
+    public BinaryItemTool(List<AbstractItem> items, List<AbstractItem> tempItems, Recorder recorder, BinaryItemSupplier supplier){
         clicked = false;
+        this.recorder = recorder;
         this.items = items;
         this.tempItems = tempItems;
         this.supplier = supplier;
@@ -47,6 +48,7 @@ public class BinaryItemTool implements MouseHandler {
         double y = evt.getY();
         if(clicked){
             clicked = false;
+            recorder.addRecord(new CreateRecord(temp, items));
             items.add(temp);
             tempItems.clear();
         }
@@ -64,10 +66,26 @@ public class BinaryItemTool implements MouseHandler {
     protected double x1;
     protected double y1;
     protected boolean clicked;
+    protected Recorder recorder;
     protected AbstractBinaryItem temp;
     protected List<AbstractItem> items;
     protected List<AbstractItem> tempItems;
     protected BinaryItemSupplier supplier;
+}
+
+class CreateRecord implements Record {
+    CreateRecord(AbstractItem i, List<AbstractItem> items){
+        this.i= i;
+        this.items = items;
+    }
+
+    @Override
+    public void undo(){
+        items.remove(i);
+    }
+
+    private AbstractItem i;
+    private List<AbstractItem> items;
 }
 
 interface BinaryItemSupplier {

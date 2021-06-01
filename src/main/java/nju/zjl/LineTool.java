@@ -5,8 +5,8 @@ import java.util.List;
 import javafx.scene.input.MouseEvent;
 
 public class LineTool extends BinaryItemTool {
-    public LineTool(List<AbstractItem> items, List<AbstractItem> tempItems){
-        super(items, tempItems, Line::new);
+    public LineTool(List<AbstractItem> items, List<AbstractItem> tempItems, Recorder recorder){
+        super(items, tempItems, recorder, Line::new);
     }
     
     @Override
