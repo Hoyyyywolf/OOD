@@ -15,7 +15,7 @@ public class CanvasController {
         tempItems = new LinkedList<>();
         selectedItems = new LinkedList<>();
         state = "";
-        handler = new MoveTool(items, selectedItems);
+        handler = new MouseHandler(){};
         handlerMap = new HashMap<>();
 
         initHandler();
@@ -24,7 +24,7 @@ public class CanvasController {
 
     public void initTool(){
         handlerMap.put("line", new LineTool(items, tempItems));
-        handlerMap.put("move", new MoveTool(items, selectedItems));
+        handlerMap.put("move", new MoveTool(items, tempItems, selectedItems));
         handlerMap.put("triangle", new BinaryItemTool(items, tempItems, Triangle::new));
         handlerMap.put("rectangle", new BinaryItemTool(items, tempItems, Rectangle::new));
         handlerMap.put("ellipse", new BinaryItemTool(items, tempItems, Ellipse::new));
@@ -76,8 +76,8 @@ public class CanvasController {
             if(handler.mouseDragged(evt))
                 updateCanvas();    
         });
-        canvas.setOnMouseDragReleased(evt -> {
-            if(handler.mouseDragReleased(evt))
+        canvas.setOnMouseReleased(evt -> {
+            if(handler.mouseReleased(evt))
                 updateCanvas();    
         });
     }

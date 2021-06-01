@@ -2,61 +2,52 @@ package nju.zjl;
 
 import java.util.List;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 public class MoveTool implements MouseHandler {
-    public MoveTool(List<AbstractItem> items, List<AbstractItem> selectedItems){
+    public MoveTool(List<AbstractItem> items, List<AbstractItem> tempItems, List<AbstractItem> selectedItems){
         this.items = items;
+        this.tempItems = tempItems;
         this.selectedItems = selectedItems;
         lastOver = null;
         lastX = 0;
         lastY = 0;
+        pressSpace = false;
+        boxSelection = null;
+        beginCopy = false;
     }
     
     @Override
     public boolean mouseMoved(MouseEvent evt){
-        AbstractItem temp = lastOver;
+        AbstractItem t = lastOver;
         lastOver = overWhich(evt.getX(), evt.getY(), items);
-        return lastOver != temp;
+        return lastOver != t;
     }
 
     @Override
     public boolean mousePressed(MouseEvent evt){
         double x = evt.getX();
         double y = evt.getY();
+        lastX = x;
+        lastY = y;
         AbstractItem i = overWhich(x, y, items);
-        if(evt.isControlDown()){
-            if(i != null){
-                if(selectedItems.contains(i)){
-                    selectedItems.remove(i);
-                    i.setSelected(false);
-                }
-                else{
-                    selectedItems.add(i);
-                    i.setSelected(true);
-                }
-                lastX = x;
-                lastY = y;
+        if(i == null){
+            pressSpace = true;
+            if(!selectedItems.isEmpty()){
+                selectedItems.stream().forEach(it -> it.setSelected(false));
+                selectedItems.clear();
                 return true;
             }
         }
         else{
-            if(i == null){
-                if(!selectedItems.isEmpty()){
-                    selectedItems.stream().forEach(it -> it.setSelected(false));
-                    selectedItems.clear();
-                    return true;
-                }
-            }
-            else{
-                selectedItems.stream().forEach(it -> it.setSelected(false));
-                selectedItems.clear();
-                i.setSelected(true);
-                selectedItems.add(i);
-                lastX = x;
-                lastY = y;
-                return true;
-            }
+            pressSpace = false;
+            selectedItems.stream().forEach(it -> it.setSelected(false));
+            selectedItems.clear();
+            i.setSelected(true);
+            selectedItems.add(i);
+            return true;
         }
         return false;
     }
@@ -65,10 +56,41 @@ public class MoveTool implements MouseHandler {
     public boolean mouseDragged(MouseEvent evt){
         double x = evt.getX();
         double y = evt.getY();
-        if(!selectedItems.isEmpty()){
-            selectedItems.stream().forEach(it -> it.translate(x - lastX, y - lastY));
-            lastX = x;
-            lastY = y;
+        if(pressSpace){
+            if(boxSelection == null){
+                boxSelection = new BoxSelection(lastX, lastY, x, y);
+                tempItems.add(boxSelection);
+                updateBoxSelection();
+            }
+            else{
+                boxSelection.setVec2(x, y);
+                updateBoxSelection();
+            }
+        }
+        else{
+            if(evt.isAltDown()){
+                if(!beginCopy){
+                    beginCopy = true;
+                    
+                }
+                lastX = x;
+                lastY = y;
+            }
+            else{
+                selectedItems.stream().forEach(it -> it.translate(x - lastX, y - lastY));
+                lastX = x;
+                lastY = y;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean mouseReleased(MouseEvent evt){
+        if(boxSelection != null){
+            updateBoxSelection();
+            tempItems.clear();
+            boxSelection = null;
             return true;
         }
         return false;
@@ -88,9 +110,46 @@ public class MoveTool implements MouseHandler {
         return ret;
     }
 
+    protected void updateBoxSelection(){
+        selectedItems.clear();
+        Rect rec = boxSelection.boundingRect();
+        for(AbstractItem i : items){
+            if(rec.hasIntersection(i.boundingRect())){
+                i.setSelected(true);
+                selectedItems.add(i);
+            }
+            else{
+                i.setSelected(false);
+            }
+        }
+    }
+
     protected List<AbstractItem> items;
+    protected List<AbstractItem> tempItems;
     protected List<AbstractItem> selectedItems;
     protected AbstractItem lastOver;
     protected double lastX;
     protected double lastY;
+    protected boolean pressSpace;
+    protected AbstractBinaryItem boxSelection;
+    protected boolean beginCopy;
+}
+
+class BoxSelection extends AbstractBinaryItem {
+    public BoxSelection(double x1, double y1, double x2, double y2){
+        super(x1, y1, x2, y2);
+    }
+    
+    @Override
+    public void drawItem(GraphicsContext gc){
+        gc.setFill(Color.GRAY);
+        gc.setGlobalAlpha(0.3);
+        gc.fillRect(Math.min(v1.x, v2.x), Math.min(v1.y, v2.y), Math.abs(v1.x - v2.x), Math.abs(v1.y - v2.y));
+        gc.setGlobalAlpha(1.0);
+    }
+
+    @Override
+    public boolean hangOver(double x, double y){
+        return false;
+    }
 }

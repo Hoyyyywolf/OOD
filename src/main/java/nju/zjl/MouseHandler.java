@@ -15,7 +15,7 @@ public interface MouseHandler {
     default boolean mouseDragged(MouseEvent evt){
         return false;
     }
-    default boolean mouseDragReleased(MouseEvent evt){
+    default boolean mouseReleased(MouseEvent evt){
         return false;
     }
 }

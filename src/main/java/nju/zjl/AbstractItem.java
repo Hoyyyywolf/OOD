@@ -14,11 +14,11 @@ public abstract class AbstractItem {
         gc.setLineWidth(Constants.DASH_LINE_WIDTH);
         gc.setLineDashes(Constants.DASHES);
         Rect rec = boundingRect();
-        if(selected){
+        if(overed){
             gc.setStroke(Color.RED);
             gc.strokeRect(rec.x, rec.y, rec.w, rec.h);
         }
-        else if(overed){
+        else if(selected){
             gc.setStroke(Color.BLACK);
             gc.strokeRect(rec.x, rec.y, rec.w, rec.h);
         }

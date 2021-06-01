@@ -14,6 +14,10 @@ public class Rect {
         return x0 >= 0 && x0 <= w && y0 >= 0 && y0 <= h;
     }
 
+    public boolean hasIntersection(Rect other){
+        return this.x + this.w > other.x && other.x + other.w > this.x && this.y + this.h > other.y && other.y + other.h > this.y;
+    }
+
     public double x;
     public double y;
     public double w;
