@@ -39,6 +39,19 @@ public class CanvasController {
         }
     }
 
+    public void composeItems(){
+        if(selectedItems.size() <= 1){
+            return;
+        }
+        CompositeItem ci = new CompositeItem(selectedItems);
+        items.removeAll(selectedItems);
+        items.add(ci);
+        selectedItems.clear();
+        selectedItems.add(ci);
+        ci.setSelected(true);
+        updateCanvas();
+    }
+
     private void updateCanvas(){
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());

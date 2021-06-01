@@ -25,21 +25,38 @@ public class MoveTool implements MouseHandler {
         double x = evt.getX();
         double y = evt.getY();
         AbstractItem i = overWhich(x, y, items);
-        if(i == null){
-            if(!selectedItems.isEmpty()){
-                selectedItems.stream().forEach(it -> it.setSelected(false));
-                selectedItems.clear();
+        if(evt.isControlDown()){
+            if(i != null){
+                if(selectedItems.contains(i)){
+                    selectedItems.remove(i);
+                    i.setSelected(false);
+                }
+                else{
+                    selectedItems.add(i);
+                    i.setSelected(true);
+                }
+                lastX = x;
+                lastY = y;
                 return true;
             }
         }
         else{
-            selectedItems.stream().forEach(it -> it.setSelected(false));
-            selectedItems.clear();
-            i.setSelected(true);
-            selectedItems.add(i);
-            lastX = x;
-            lastY = y;
-            return true;
+            if(i == null){
+                if(!selectedItems.isEmpty()){
+                    selectedItems.stream().forEach(it -> it.setSelected(false));
+                    selectedItems.clear();
+                    return true;
+                }
+            }
+            else{
+                selectedItems.stream().forEach(it -> it.setSelected(false));
+                selectedItems.clear();
+                i.setSelected(true);
+                selectedItems.add(i);
+                lastX = x;
+                lastY = y;
+                return true;
+            }
         }
         return false;
     }
