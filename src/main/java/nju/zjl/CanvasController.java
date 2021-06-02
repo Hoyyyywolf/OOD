@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.shape.StrokeLineCap;
 
 public class CanvasController {
@@ -27,7 +28,7 @@ public class CanvasController {
 
     public void initTool(){
         handlerMap.put("line", new LineTool(items, tempItems, recorder));
-        handlerMap.put("move", new SelectTool(items, tempItems, selectedItems, recorder));
+        handlerMap.put("move", new MoveTool(items, tempItems, selectedItems, recorder));
         handlerMap.put("triangle", new BinaryItemTool(items, tempItems, recorder, Triangle::new));
         handlerMap.put("rectangle", new BinaryItemTool(items, tempItems, recorder, Rectangle::new));
         handlerMap.put("ellipse", new BinaryItemTool(items, tempItems, recorder, Ellipse::new));
@@ -91,6 +92,14 @@ public class CanvasController {
             if(handler.mouseReleased(evt))
                 updateCanvas();    
         });
+        canvas.setOnKeyPressed(evt -> {
+            if(evt.getCode().equals(KeyCode.Z) && evt.isControlDown()){
+                undo();
+            }
+            if(evt.getCode().equals(KeyCode.X) && evt.isControlDown()){
+                composeItems();
+            }
+        });
     }
 
     private Canvas canvas;
@@ -114,6 +123,7 @@ class ComposeRecord implements Record {
         items.remove(c);
         for(AbstractItem i : c.getChildren()){
             items.add(i);
+            i.setSelected(false);
         }
     }
 

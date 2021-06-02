@@ -8,4 +8,7 @@ public final class Constants {
     public static final double DASHES = 4.0;
     public static final double TEXT_WIDTH = 200.0;
     public static final double TEXT_HEIGHT = 20.0;
+
+    public static final double BUTTON_WIDTH_1 = 40.0;
+    public static final double BUTTON_WIDTH_2 = 15.0;
 }

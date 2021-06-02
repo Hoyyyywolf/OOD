@@ -7,8 +7,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
-public class SelectTool implements MouseHandler {
-    public SelectTool(List<AbstractItem> items, List<AbstractItem> tempItems, List<AbstractItem> selectedItems, Recorder recorder){
+public class MoveTool implements MouseHandler {
+    public MoveTool(List<AbstractItem> items, List<AbstractItem> tempItems, List<AbstractItem> selectedItems, Recorder recorder){
         this.items = items;
         this.tempItems = tempItems;
         this.selectedItems = selectedItems;
@@ -106,6 +106,7 @@ public class SelectTool implements MouseHandler {
         else{
             if(beginCopy){
                 recorder.addRecord(new CopyRecord(selectedItems.get(0), items));
+                beginCopy = false;
             }
             else if(lastX != firstX){
                 recorder.addRecord(new MoveRecord(selectedItems.get(0), evt.getX() - firstX, evt.getY() - firstY));
