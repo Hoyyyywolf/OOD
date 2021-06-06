@@ -26,15 +26,6 @@ public class CanvasController {
         initTool();
     }
 
-    public void initTool(){
-        handlerMap.put("line", new LineTool(items, tempItems, recorder));
-        handlerMap.put("move", new MoveTool(items, tempItems, selectedItems, recorder));
-        handlerMap.put("triangle", new BinaryItemTool(items, tempItems, recorder, Triangle::new));
-        handlerMap.put("rectangle", new BinaryItemTool(items, tempItems, recorder, Rectangle::new));
-        handlerMap.put("ellipse", new BinaryItemTool(items, tempItems, recorder, Ellipse::new));
-        handlerMap.put("text", new TextTool(items, recorder));
-    }
-
     public void changeState(String s){
         if(!state.equals(s)){
             state = s;
@@ -69,6 +60,15 @@ public class CanvasController {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         items.forEach(i -> i.draw(gc));
         tempItems.forEach(i -> i.draw(gc));
+    }
+
+    private void initTool(){
+        handlerMap.put("line", new LineTool(items, tempItems, recorder));
+        handlerMap.put("move", new MoveTool(items, tempItems, selectedItems, recorder));
+        handlerMap.put("triangle", new BinaryItemTool(items, tempItems, recorder, Triangle::new));
+        handlerMap.put("rectangle", new BinaryItemTool(items, tempItems, recorder, Rectangle::new));
+        handlerMap.put("ellipse", new BinaryItemTool(items, tempItems, recorder, Ellipse::new));
+        handlerMap.put("text", new TextTool(items, recorder));
     }
 
     private void initHandler(){

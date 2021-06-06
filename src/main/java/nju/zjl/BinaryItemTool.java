@@ -88,6 +88,7 @@ class CreateRecord implements Record {
     private List<AbstractItem> items;
 }
 
+@FunctionalInterface
 interface BinaryItemSupplier {
     AbstractBinaryItem get(double x1, double y1, double x2, double y2);
 }
